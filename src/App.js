@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import reserverService from './service/reservers.js'
+import reserveeService from './service/reservees.js'
 
 const Form = () => {
   const [name, setName] = useState('Type here!');
@@ -20,9 +20,9 @@ const Header = ({text}) => (
   <h1>{text}</h1>
 )
 
-const ReserverList = ({reservers, deleteHandler}) => (
+const ReserveeList = ({reservees, deleteHandler}) => (
   <ul>
-    {reservers.map(r =><li key={r.id}>{r.name} <Button onClickHandler={deleteHandler} id={r.id} text={'Cancel'} /> </li>)}
+    {reservees.map(r =><li key={r.id}>{r.name} <Button onClickHandler={deleteHandler} id={r.id} text={'Cancel'} /> </li>)}
   </ul>
 )
 
@@ -34,25 +34,25 @@ const Button = ({onClickHandler, text, id}) => (
 
 
 const App = () => {
-  const [reservers, setReservers] = useState([]);
+  const [reservees, setReservees] = useState([]);
 
   useEffect(() => {
-    reserverService
+    reserveeService
       .getAll()
       .then(initialReservers => {
         console.log(initialReservers);
-        setReservers(initialReservers);
+        setReservees(initialReservers);
       })
   }, []);
 
-  const deleteReserver = event => {
-    const reserverToDelete = reservers.find(reserver => reserver.id == event.target.value);
-    console.log(reserverToDelete, event.target.value);
-    reserverService
-      .destroy(reserverToDelete.id)
-      .then(deletedReserver => {
-        console.log('deleted, ', deletedReserver);
-        setReservers(reservers.filter(reserver => reserver.id != deletedReserver.id));
+  const deleteReservee = event => {
+    const reserveeToDelete = reservees.find(reservee => reservee.id == event.target.value);
+    console.log(reserveeToDelete, event.target.value);
+    reserveeService
+      .destroy(reserveeToDelete.id)
+      .then(deletedReservee => {
+        console.log('deleted, ', deletedReservee);
+        setReservees(reservees.filter(reservee => reservee.id != deletedReservee.id));
       })
   }
 
@@ -65,7 +65,7 @@ const App = () => {
       <Header text="Book a table"/>
       <Header text="Please enter your contact information" />
       <Form />
-      <ReserverList reservers={reservers} deleteHandler={deleteReserver}/>
+      <ReserveeList reservees={reservees} deleteHandler={deleteReservee}/>
     </div>
   )
 }
