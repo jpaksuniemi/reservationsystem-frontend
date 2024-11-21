@@ -2,14 +2,17 @@ import { useEffect, useState } from 'react'
 import reserverService from './service/reservers.js'
 
 const Form = () => {
+  const [name, setName] = useState('Type here!');
+  const [email, setEmail] = useState('Type here!');
 
   return (
-  <form>
-    <label htmlFor="name">Full name:</label>
-    <input type="text" id="name" name="name"></input> <br />
-    <label htmlFor="email">Email:</label>
-    <input type="text" id="email" name="email"></input>
-  </form>
+    <form >
+      <label htmlFor="name">Full name:</label>
+      <input type="text" id="name" name="name" value={name} onChange={e => setName(e.target.value)}></input> <br />
+      <label htmlFor="email">Email:</label>
+      <input type="text" id="email" name="email" value={email} onChange={e => setEmail(e.target.value)}></input> <br />
+      <Button text={'Submit'} />
+    </form>
   )
 }
 
