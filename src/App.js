@@ -1,16 +1,27 @@
 import { useEffect, useState } from 'react'
 import reserveeService from './service/reservees.js'
 
-const Form = () => {
-  const [name, setName] = useState('Type here!');
-  const [email, setEmail] = useState('Type here!');
+const Form = ({reservees, setReservees}) => {
+  const [name, setNewName] = useState('Type here!');
+  const [email, setNewEmail] = useState('Type here!');
+
+  const onSubmitHandler = e => {
+    e.preventDefault();
+    const newReservee = { name, email };
+    console.log(newReservee);
+    reserveeService
+      .create(newReservee)
+      .then(returnedReservee => {
+        setReservees(reservees.concat(returnedReservee));
+      })
+  }
 
   return (
-    <form >
+    <form onSubmit={onSubmitHandler}>
       <label htmlFor="name">Full name:</label>
-      <input type="text" id="name" name="name" value={name} onChange={e => setName(e.target.value)}></input> <br />
+      <input type="text" id="name" name="name" value={name} onChange={e => setNewName(e.target.value)}></input> <br />
       <label htmlFor="email">Email:</label>
-      <input type="text" id="email" name="email" value={email} onChange={e => setEmail(e.target.value)}></input> <br />
+      <input type="text" id="email" name="email" value={email} onChange={e => setNewEmail(e.target.value)}></input> <br />
       <Button text={'Submit'} />
     </form>
   )
@@ -22,7 +33,7 @@ const Header = ({text}) => (
 
 const ReserveeList = ({reservees, deleteHandler}) => (
   <ul>
-    {reservees.map(r =><li key={r.id}>{r.name} <Button onClickHandler={deleteHandler} id={r.id} text={'Cancel'} /> </li>)}
+    {reservees.map(r => <li key={r.id}>{r.name} - {r.email}<Button onClickHandler={deleteHandler} id={r.id} text={'Cancel'} /> </li>)}
   </ul>
 )
 
@@ -64,7 +75,7 @@ const App = () => {
     <div>
       <Header text="Book a table"/>
       <Header text="Please enter your contact information" />
-      <Form />
+      <Form setReservees={setReservees} reservees={reservees} />
       <ReserveeList reservees={reservees} deleteHandler={deleteReservee}/>
     </div>
   )
